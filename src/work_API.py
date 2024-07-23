@@ -49,4 +49,3 @@ class HH(Parser):
             self.vacancies.extend(vacancies)
             self.params["page"] += 1
         super().save_in_file(self.vacancies)
-
