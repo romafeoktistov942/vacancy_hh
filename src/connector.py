@@ -31,7 +31,9 @@ class BaseConnector(ABC):
 
 class Connector(BaseConnector):
 
-    def __init__(self, name_file: str) -> None:
+    def __init__(
+        self, name_file: str = "./data/user_input_vacancies.json"
+    ) -> None:
         self._vacancy_list = []
         self._finish_list = []
         self.name_file = name_file
