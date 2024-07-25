@@ -9,21 +9,20 @@ class WorkVacancy:
         self.name_vacancy = name_vacancy
         self.url_vacancy = url_vacancy
         self.city = city
-
-        if self._validate_salary(salary_from) is None:
-            if salary_from is None:
-                self.salary_from = 0
-            else:
-                self.salary_from = salary_from
-
-        if self._validate_salary(salary_to) is None:
-            if salary_to is None:
-                self.salary_to = 0
-            else:
-                self.salary_to = salary_to
-
+        self.salary_from = salary_from
+        self.salary_to = salary_to
         self.salary_currency = salary_currency
         self.snippet_requirement = snippet_requirement
+        self._validate_and_set_salaries()
+
+    def _validate_and_set_salaries(self) -> None:
+        if self._validate_salary(self.salary_from) is None:
+            if self.salary_from is None:
+                self.salary_from = 0
+
+        if self._validate_salary(self.salary_to) is None:
+            if self.salary_to is None:
+                self.salary_to = 0
 
     @staticmethod
     def _validate_salary(salary):
