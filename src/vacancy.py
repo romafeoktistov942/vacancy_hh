@@ -13,19 +13,19 @@ class WorkVacancy:
         self.salary_to = salary_to
         self.salary_currency = salary_currency
         self.snippet_requirement = snippet_requirement
-        self._validate_and_set_salaries()
+        self.__validate_and_set_salaries()
 
-    def _validate_and_set_salaries(self) -> None:
-        if self._validate_salary(self.salary_from) is None:
+    def __validate_and_set_salaries(self) -> None:
+        if self.__validate_salary(self.salary_from) is None:
             if self.salary_from is None:
                 self.salary_from = 0
 
-        if self._validate_salary(self.salary_to) is None:
+        if self.__validate_salary(self.salary_to) is None:
             if self.salary_to is None:
                 self.salary_to = 0
 
     @staticmethod
-    def _validate_salary(salary):
+    def __validate_salary(salary):
         """
         Метод класса осуществляющий валидацию заработной платы вакансий
         :param salary: зарплата передававемая при инициализации, либо salary_to, либо salary_from
