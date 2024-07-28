@@ -36,7 +36,7 @@ class Connector(BaseConnector):
     ) -> None:
         self._vacancy_list = []
         self._finish_list = []
-        self.name_file = name_file
+        self.__name_file = name_file
 
     @staticmethod
     def filter_vacancy(vacancy_dict: dict, key: str, value: int | str) -> bool:
@@ -49,7 +49,7 @@ class Connector(BaseConnector):
         :return: список вакансий после обработки классом WorkVacancy
         """
 
-        with open(self.name_file, "r", encoding="utf-8") as file:
+        with open(self.__name_file, "r", encoding="utf-8") as file:
             read_vacancy_file = json.load(file)
             for item in read_vacancy_file:
                 if item["salary"] is None or item["area"] is None:
@@ -72,7 +72,7 @@ class Connector(BaseConnector):
         vacancy_list = self.create_vacancy_list()
         new_vac = []
 
-        with open(self.name_file, "w", encoding="utf-8") as file:
+        with open(self.__name_file, "w", encoding="utf-8") as file:
             for f in vacancy_list:
                 salary_from = f.salary_from
                 salary_to = f.salary_to
@@ -101,7 +101,7 @@ class Connector(BaseConnector):
                            получаемый от пользователя. Для осуществления подбора вакансий
         :return: список отфильтрованных вакансий в соответствии с заданным условием
         """
-        with open(self.name_file, "r", encoding="utf-8") as file:
+        with open(self.__name_file, "r", encoding="utf-8") as file:
             top_list = json.load(file)
             for item in top_list:
                 if self.filter_vacancy(item, key_name, value_name) is True:
@@ -115,4 +115,4 @@ class Connector(BaseConnector):
 
     def delete_vacancy(self) -> None:
         """Метод удаляющий файл *.json содержащий вакансии сформированный в соответсвии с заданной структурой"""
-        os.remove(self.name_file)
+        os.remove(self.__name_file)
