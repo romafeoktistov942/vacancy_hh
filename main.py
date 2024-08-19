@@ -1,21 +1,74 @@
-from src.work_API import HH
-from src.user_interface import interface
-from src.connector import Connector
+from src.work_api import (
+    ParserEmployer as Empl,
+    ParserEmployerVacancy as EmplVac,
+)
+from config import path_to_data as path
+from src.connector import config_db
+from tqdm import tqdm
+from utils.converter import conv
+import json
+from src.db_manager import DBManager
+from src.work_vac import runner
+from utils.interface import user_interface
+
+LIST_NAME = [
+    "employers.csv",
+    "logo.csv",
+    "vacancies.csv",
+    "salary.csv",
+    "city.csv",
+    "snippet.csv",
+]
 
 
 def main():
-    user_input = input("Введите название вакансии: ")
-    user_request = HH(f"./data/{user_input}_vacancies.json")
+    counter = 0
 
-    print("Ожидаем получения данных по вакансиям...")
+    # while counter < 10:
+    for user_empl in [
+        "ВкусВилл",
+        "X5 Tech",
+        "Нефтьмагистраль",
+        "ПАО МТС",
+        "Тинькофф Банк",
+        "Sumsung Electronics Rus",
+        "РСХБ-Интех",
+        "Авито тех",
+        "DODO BRANDS",
+        "aviasales",
+    ]:
+        # user_empl = input("Введите работодателя: ").lower()
+        print(f"Получаем данные из API о работадателе {user_empl}...")
+        path_to_empl = f"{path()}/empl.json"
+        empl = Empl(path_to_empl, user_empl)
+        empl.load_file()
+        empl.save_file()
+        counter += 1
 
-    user_request.load_vacancies(user_input)
+    print("Получение данных о вакансиях работодателя...")
 
-    print("Данные записаны")
+    with open(f"{path()}/empl.json", "r", encoding="utf-8") as file:
+        load_file = json.load(file)
 
-    connect = Connector(f"./data/{user_input}_vacancies.json")
-    connect.add_vacancy()
-    interface(f"./data/{user_input}_vacancies.json")
+        for item in tqdm(range(0, len(load_file))):
+            path_vac = f"{path()}/vac_empl.json"
+            vac_empl = EmplVac(path_vac, load_file[item]["id"])
+            vac_empl.load_file()
+            vac_empl.save_file()
+
+    runner()
+    conv()
+
+    db = config_db()
+    manager = DBManager(db)
+    manager.create_table()
+
+    for name in LIST_NAME:
+        path_to_file = f"{path()}/{name}"
+        name_table = name.split(".")[0]
+        print(manager.load_info_in_table(path_to_file, name_table))
+
+    user_interface(db)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ from src.connector import Connector
 from prettytable import PrettyTable
 
 
-def interface(way_to_file: str) -> None:
+def interface(path_to_file: str) -> None:
     """Функция для работы с пользователем"""
     while True:
         print(
@@ -17,15 +17,15 @@ def interface(way_to_file: str) -> None:
             additional_parameter = int(
                 input("Введите желаемую стартовую сумму: ")
             )
-            print_top("salary_from", additional_parameter, way_to_file)
+            print_top("salary_from", additional_parameter, path_to_file)
         elif user_input == "2":
             additional_parameter = int(
                 input("Введите желаемую конечную сумму: ")
             )
-            print_top("salary_to", additional_parameter, way_to_file)
+            print_top("salary_to", additional_parameter, path_to_file)
         elif user_input == "3":
             additional_parameter = input("Введите желаемый город: ")
-            print_top("area", additional_parameter, way_to_file)
+            print_top("area", additional_parameter, path_to_file)
 
         elif user_input == "!":
             print("Подбор завершен")
@@ -35,13 +35,13 @@ def interface(way_to_file: str) -> None:
                 "Введите: да или нет\n"
             )
             if user_delete.lower() == "да":
-                del_file = Connector(way_to_file).delete_vacancy()
+                del_file = Connector(path_to_file).delete_vacancy()
                 print("Завершение работы программы")
                 quit()
             else:
-                way_to_file = Connector(way_to_file)
+                path_to_file = Connector(path_to_file)
                 print(
-                    f"Файл с вакансиями сохранен. Путь к файлу: {way_to_file.name_file}"
+                    f"Файл с вакансиями сохранен. Путь к файлу: {path_to_file.name_file}"
                 )
                 quit()
 
